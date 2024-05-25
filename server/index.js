@@ -21,12 +21,17 @@ const corsOptions = {
     origin: 'https://try2-omega.vercel.app' // Replace with your frontend URL
 };
 
+app.get('/', (req, res) => {
+    res.send('Hello, World!');
+});
+
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 app.options('*', cors());
 
 app.get('/webhook', (req, res) => {
+    console.log('Received webhook request:', req.query); // Log the entire query object
     const mode = req.query['hub.mode'];
     const token = req.query['hub.verify_token'];
     const challenge = req.query['hub.challenge'];
