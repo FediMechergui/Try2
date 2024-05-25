@@ -1,22 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 
 function App() {
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('https://https://try2-06kz.onrender.com/webhook', {
+      method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => {
+      console.error('Error:', error);
+      setError('Could not connect to the backend. Please try again later.');
+    });
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <h1>Messenger Webhook</h1>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          This is a simple Messenger Webhook integration.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </header>
     </div>
   );
