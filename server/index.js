@@ -15,7 +15,7 @@ app.use(cors());
 
 // Root route
 app.get('/', (req, res) => {
-    res.send('Server is up and running!');
+    res.send('2061127169');
 });
 
 app.get('/webhook', (req, res) => {
