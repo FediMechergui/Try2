@@ -10,13 +10,21 @@ const PORT = process.env.PORT || 9000;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
-app.use(bodyParser.json());
-app.use(cors());
-
-// Root route
-app.get('/', (req, res) => {
-    res.send('2061127169');
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://try2-omega.vercel.app'); // Replace with your frontend URL
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
 });
+
+const corsOptions = {
+    origin: 'https://try2-omega.vercel.app' // Replace with your frontend URL
+};
+
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
+
+app.options('*', cors());
 
 app.get('/webhook', (req, res) => {
     const mode = req.query['hub.mode'];
@@ -28,9 +36,11 @@ app.get('/webhook', (req, res) => {
             console.log('WEBHOOK_VERIFIED');
             res.status(200).send(challenge);
         } else {
+            console.error('Verification token mismatch');
             res.sendStatus(403);
         }
     } else {
+        console.error('Missing mode or token in request');
         res.sendStatus(400);
     }
 });
@@ -53,6 +63,7 @@ app.post('/webhook', (req, res) => {
 
         res.status(200).send('EVENT_RECEIVED');
     } else {
+        console.error('Invalid object type');
         res.sendStatus(404);
     }
 });
@@ -104,7 +115,7 @@ function callSendAPI(sender_psid, response) {
         if (!err) {
             console.log('Message sent!');
         } else {
-            console.error('Unable to send message:' + err);
+            console.error('Unable to send message:', err);
         }
     });
 }
