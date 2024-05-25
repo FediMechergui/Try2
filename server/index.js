@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
@@ -13,6 +12,11 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
 app.use(bodyParser.json());
 app.use(cors());
+
+// Root route
+app.get('/', (req, res) => {
+    res.send('Server is up and running!');
+});
 
 app.get('/webhook', (req, res) => {
     const mode = req.query['hub.mode'];
