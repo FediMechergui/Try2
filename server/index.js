@@ -11,14 +11,14 @@ const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://try2-omega.vercel.app'); // Replace with your frontend URL
+    res.setHeader('Access-Control-Allow-Origin', 'https://try2-omega.vercel.app'); 
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
 
 const corsOptions = {
-    origin: 'https://try2-omega.vercel.app' // Replace with your frontend URL
+    origin: 'https://try2-omega.vercel.app' 
 };
 
 app.get('/', (req, res) => {
@@ -31,7 +31,7 @@ app.use(bodyParser.json());
 app.options('*', cors());
 
 app.get('/webhook', (req, res) => {
-    console.log('Received webhook request:', req.query); // Log the entire query object
+    console.log('Received webhook request:', req.query); 
     const mode = req.query['hub.mode'];
     const token = req.query['hub.verify_token'];
     const challenge = req.query['hub.challenge'];
