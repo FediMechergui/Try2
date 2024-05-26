@@ -7,8 +7,8 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 9000;
 
-const VERIFY_TOKEN = mohtadi;
-const PAGE_ACCESS_TOKEN = EAALx8yfqEdwBOZBN9pVWtyM1zXc7wcVTVgnbttP5EuzlgoKOOKXZBcudY5GIbfex4dI6FeqvVY0JpoZAwfykI9uTxYZAbVnrpSQ5Bq1HnVzBHIkAXJ8fcai9HBhcZBT0LQ8LHZBSsPb1VRBMUN3ZAfPDXMNGA25u9GQ5wkXcCZAjCDLqwHj0jU23n1SaFcachdfqRgZDZD;
+const VERIFY_TOKEN = "mohtadi";
+const PAGE_ACCESS_TOKEN = "EAALx8yfqEdwBOZBN9pVWtyM1zXc7wcVTVgnbttP5EuzlgoKOOKXZBcudY5GIbfex4dI6FeqvVY0JpoZAwfykI9uTxYZAbVnrpSQ5Bq1HnVzBHIkAXJ8fcai9HBhcZBT0LQ8LHZBSsPb1VRBMUN3ZAfPDXMNGA25u9GQ5wkXcCZAjCDLqwHj0jU23n1SaFcachdfqRgZDZD";
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://try2-omega.vercel.app'); 
