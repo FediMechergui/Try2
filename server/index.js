@@ -7,8 +7,8 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 9000;
 
-const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
-const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+const VERIFY_TOKEN = mohtadi;
+const PAGE_ACCESS_TOKEN = EAALx8yfqEdwBOZBN9pVWtyM1zXc7wcVTVgnbttP5EuzlgoKOOKXZBcudY5GIbfex4dI6FeqvVY0JpoZAwfykI9uTxYZAbVnrpSQ5Bq1HnVzBHIkAXJ8fcai9HBhcZBT0LQ8LHZBSsPb1VRBMUN3ZAfPDXMNGA25u9GQ5wkXcCZAjCDLqwHj0jU23n1SaFcachdfqRgZDZD;
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://try2-omega.vercel.app'); 
@@ -31,13 +31,18 @@ app.use(bodyParser.json());
 app.options('*', cors());
 
 app.get('/webhook', (req, res) => {
-    console.log('Received webhook request:', req.query); 
+    console.log('Received webhook verification request:', req.query);
+
     const mode = req.query['hub.mode'];
     const token = req.query['hub.verify_token'];
     const challenge = req.query['hub.challenge'];
 
+    console.log('Mode:', mode);
+    console.log('Token:', token);
+    console.log('Challenge:', challenge);
+
     if (mode && token) {
-        if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+        if (mode === 'subscribe' && token === process.env.VERIFY_TOKEN) {
             console.log('WEBHOOK_VERIFIED');
             res.status(200).send(challenge);
         } else {
@@ -49,6 +54,7 @@ app.get('/webhook', (req, res) => {
         res.sendStatus(400);
     }
 });
+
 
 app.post('/webhook', (req, res) => {
     const body = req.body;
