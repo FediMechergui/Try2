@@ -10,53 +10,29 @@ const PORT = process.env.PORT || 9000;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://try2-omega.vercel.app'); 
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-});
+// CORS setup
+app.use(cors());
 
-const corsOptions = {
-    origin: 'https://try2-omega.vercel.app' 
-};
+// Body parser middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
-
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.options('*', cors());
-
+// Webhook verification endpoint
 app.get('/webhook', (req, res) => {
-    console.log('Received webhook verification request:', req.query);
-
     const mode = req.query['hub.mode'];
     const token = req.query['hub.verify_token'];
     const challenge = req.query['hub.challenge'];
 
-    console.log('Mode:', mode);
-    console.log('Token:', token);
-    console.log('Challenge:', challenge);
-
-    if (mode && token) {
-        if (mode === 'subscribe' && token === process.env.VERIFY_TOKEN) {
-            console.log('WEBHOOK_VERIFIED');
-            res.status(200).send(challenge);
-        } else {
-            console.error('Verification token mismatch');
-            res.sendStatus(403);
-        }
+    if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+        console.log('WEBHOOK_VERIFIED');
+        res.status(200).send(challenge);
     } else {
-        console.error('Missing mode or token in request');
-        res.sendStatus(400);
+        console.error('Verification token mismatch');
+        res.sendStatus(403);
     }
 });
 
-
+// Webhook event handling endpoint
 app.post('/webhook', (req, res) => {
     const body = req.body;
 
@@ -80,6 +56,7 @@ app.post('/webhook', (req, res) => {
     }
 });
 
+// Handle incoming messages
 function handleMessage(sender_psid, received_message) {
     let response;
 
@@ -96,6 +73,7 @@ function handleMessage(sender_psid, received_message) {
     callSendAPI(sender_psid, response);
 }
 
+// Handle postbacks
 function handlePostback(sender_psid, received_postback) {
     let response;
 
@@ -110,6 +88,7 @@ function handlePostback(sender_psid, received_postback) {
     callSendAPI(sender_psid, response);
 }
 
+// Send message via Facebook Graph API
 function callSendAPI(sender_psid, response) {
     const request_body = {
         'recipient': {
@@ -123,15 +102,16 @@ function callSendAPI(sender_psid, response) {
         qs: { access_token: PAGE_ACCESS_TOKEN },
         method: 'POST',
         json: request_body
-    }, (err, res, body) => {
-        if (!err) {
+    }, (err, response, body) => {
+        if (!err && response.statusCode === 200) {
             console.log('Message sent!');
         } else {
-            console.error('Unable to send message:', err);
+            console.error('Unable to send message:', err || body.error);
         }
     });
 }
 
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
