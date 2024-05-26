@@ -28,6 +28,9 @@ app.get('/', (req, res) => {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.options('*', cors());
 
 app.get('/webhook', (req, res) => {
