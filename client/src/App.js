@@ -4,7 +4,7 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('https://try2-06kz.onrender.com/webhook', {
+    fetch(' https://f99a-197-19-70-96.ngrok-free.app/webhook', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
