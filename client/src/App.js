@@ -4,7 +4,14 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('https://f99a-197-19-70-96.ngrok-free.app/webhook?hub.mode=subscribe&hub.verify_token=mohtadi&hub.challenge=CHALLENGE_ACCEPTED', {
+    const url = 'https://f99a-197-19-70-96.ngrok-free.app/webhook';
+    const params = new URLSearchParams({
+      'hub.mode': 'subscribe',
+      'hub.verify_token': 'mohtadi',
+      'hub.challenge': 'CHALLENGE_ACCEPTED',
+    });
+
+    fetch(`${url}?${params.toString()}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
