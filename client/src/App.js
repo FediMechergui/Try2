@@ -4,7 +4,7 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(' https://f99a-197-19-70-96.ngrok-free.app/webhook', {
+    fetch('https://f99a-197-19-70-96.ngrok-free.app/webhook?hub.mode=subscribe&hub.verify_token=mohtadi&hub.challenge=CHALLENGE_ACCEPTED', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -14,9 +14,11 @@ function App() {
       if (!response.ok) {
         throw new Error('Network response was not ok ' + response.statusText);
       }
-      return response.json();
+      return response.text();  // Since the webhook verification typically returns plain text
     })
-    .then(data => console.log(data))
+    .then(data => {
+      console.log('Challenge response:', data);
+    })
     .catch(error => {
       console.error('Error:', error);
       setError('Could not connect to the backend. Please try again later.');
